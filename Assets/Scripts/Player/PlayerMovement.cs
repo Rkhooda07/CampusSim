@@ -7,6 +7,8 @@ public class PlayerMovement : MonoBehaviour
 
     private Rigidbody2D rb;
     private bool isGrounded;
+
+    // Input value (-1 = left, 0 = stop, 1 = right)
     private float moveInput;
 
     void Start()
@@ -16,11 +18,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        moveInput = Input.GetAxis("Horizontal");
-
-        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        // Keyboard support (for testing)
+        float keyboardInput = Input.GetAxis("Horizontal");
+        if (keyboardInput != 0)
         {
-            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+            moveInput = keyboardInput;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Jump();
         }
     }
 
@@ -28,6 +35,33 @@ public class PlayerMovement : MonoBehaviour
     {
         rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
     }
+
+    // ===== METHODS FOR MOBILE BUTTONS =====
+
+    public void MoveLeft()
+    {
+        moveInput = -1f;
+    }
+
+    public void MoveRight()
+    {
+        moveInput = 1f;
+    }
+
+    public void StopMoving()
+    {
+        moveInput = 0f;
+    }
+
+    public void Jump()
+    {
+        if (isGrounded)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+        }
+    }
+
+    // ===== GROUND CHECK =====
 
     void OnCollisionEnter2D(Collision2D collision)
     {
