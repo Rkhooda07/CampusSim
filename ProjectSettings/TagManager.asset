@@ -42,5 +42,14 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Ground
+    uniqueID: 2023981681
+    locked: 0
+  - name: Obstacles
+    uniqueID: 1847408437
+    locked: 0
+  - name: Player
+    uniqueID: 1099985605
+    locked: 0
   m_RenderingLayers:
   - Default
