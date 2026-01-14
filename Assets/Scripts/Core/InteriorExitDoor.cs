@@ -3,15 +3,23 @@ using UnityEngine.SceneManagement;
 
 public class InteriorExitDoor : MonoBehaviour
 {
-    [SerializeField] private string exteriorSceneName = "CampusScene";
-    [SerializeField] private string spawnPointName = "Spawn_InteriorExit_BunnyKitchen";
+    [Header("Exit Settings")]
+    [SerializeField] private string campusSceneName = "CampusScene";
+    [SerializeField] private string campusSpawnPointName = "Spawn_InteriorEntry_BunnyKitchen";
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private Interactable interactable;
+
+    private void Awake()
     {
-        if (other.CompareTag("Player"))
+        interactable = GetComponent<Interactable>();
+    }
+
+    private void Update()
+    {
+        if (interactable != null && interactable.CanInteract())
         {
-            SpawnManager.NextSpawnPointName = spawnPointName;
-            SceneManager.LoadScene(exteriorSceneName);
+            SpawnManager.NextSpawnPointName = campusSpawnPointName;
+            SceneManager.LoadScene(campusSceneName);
         }
     }
 }

@@ -1,14 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class CampusDoor : Interactable
+public class CampusDoor : MonoBehaviour
 {
-    [SerializeField] private string interiorSceneName = "Bunny_Kitchen";
-    [SerializeField] private string interiorSpawnPointName = "Spawn_InteriorEntry_BunnyKitchen";
+    [Header("Door Settings")]
+    [SerializeField] private string interiorSceneName;
+    [SerializeField] private string interiorSpawnPointName;
+
+    private Interactable interactable;
+
+    private void Awake()
+    {
+        interactable = GetComponent<Interactable>();
+    }
 
     private void Update()
     {
-        if (CanInteract())
+        if (interactable != null && interactable.CanInteract())
         {
             SpawnManager.NextSpawnPointName = interiorSpawnPointName;
             SceneManager.LoadScene(interiorSceneName);
