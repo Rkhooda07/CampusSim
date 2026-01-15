@@ -9,6 +9,7 @@ public class Interactable : MonoBehaviour
     [TextArea] public string promptMessage = "Press E";
 
     private bool playerInRange = false;
+    private bool isInteracting = false;
 
     private void Awake()
     {
@@ -22,7 +23,7 @@ public class Interactable : MonoBehaviour
 
         playerInRange = true;
 
-        if (interactionPrompt != null)
+        if (interactionPrompt != null && !isInteracting)
         {
             promptText.text = promptMessage;
             interactionPrompt.SetActive(true);
@@ -35,12 +36,29 @@ public class Interactable : MonoBehaviour
 
         playerInRange = false;
 
+        if (interactionPrompt != null && !isInteracting)
+            interactionPrompt.SetActive(false);
+    }
+
+    public void BeginInteraction()
+    {
+        isInteracting = true;
         if (interactionPrompt != null)
             interactionPrompt.SetActive(false);
     }
 
+    public void EndInteraction()
+    {
+        isInteracting = false;
+        if (interactionPrompt != null && playerInRange)
+        {
+            promptText.text = promptMessage;
+            interactionPrompt.SetActive(true);
+        }
+    }
+
     public bool CanInteract()
     {
-        return playerInRange && Input.GetKeyDown(KeyCode.E);
+        return playerInRange;
     }
 }
