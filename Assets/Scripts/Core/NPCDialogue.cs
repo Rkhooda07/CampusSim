@@ -14,10 +14,12 @@ public class NPCDialogue : MonoBehaviour
     private Interactable interactable;
     private int currentLine = 0;
     private bool isTalking = false;
+	private NPCIdleMovement idleMovement;
 
     private void Awake()
     {
         interactable = GetComponentInChildren<Interactable>();
+		idleMovement = GetComponent<NPCIdleMovement>();
 
         if (dialogueBox != null)
             dialogueBox.SetActive(false);
@@ -54,6 +56,11 @@ public class NPCDialogue : MonoBehaviour
 
         interactable.BeginInteraction();
 
+		if (idleMovement != null)
+		{
+			idleMovement.PauseMovement();
+		}
+
         dialogueBox.SetActive(true);
         dialogueText.text = dialogueLines[currentLine];
     }
@@ -74,5 +81,8 @@ public class NPCDialogue : MonoBehaviour
 
         dialogueBox.SetActive(false);
         interactable.EndInteraction();
+
+		if (idleMovement != null)
+			idleMovement.ResumeMovement();
     }
 }
