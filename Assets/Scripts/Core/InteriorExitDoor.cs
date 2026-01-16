@@ -4,8 +4,8 @@ using UnityEngine.SceneManagement;
 public class InteriorExitDoor : MonoBehaviour
 {
     [Header("Exit Settings")]
-    [SerializeField] private string campusSceneName = "CampusScene";
-    [SerializeField] private string campusSpawnPointName = "Spawn_InteriorEntry_BunnyKitchen";
+    [SerializeField] private string campusSceneName;
+    [SerializeField] private string campusSpawnPointName;
 
     private Interactable interactable;
 
@@ -16,7 +16,9 @@ public class InteriorExitDoor : MonoBehaviour
 
     private void Update()
     {
-        if (interactable != null && interactable.CanInteract())
+        if (interactable == null) return;
+
+        if (interactable.CanInteract() && Input.GetKeyDown(KeyCode.E))
         {
             SpawnManager.NextSpawnPointName = campusSpawnPointName;
             SceneManager.LoadScene(campusSceneName);

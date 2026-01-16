@@ -16,7 +16,9 @@ public class CampusDoor : MonoBehaviour
 
     private void Update()
     {
-        if (interactable != null && interactable.CanInteract())
+        if (interactable == null) return;
+
+        if (interactable.CanInteract() && Input.GetKeyDown(KeyCode.E))
         {
             SpawnManager.NextSpawnPointName = interiorSpawnPointName;
             SceneManager.LoadScene(interiorSceneName);

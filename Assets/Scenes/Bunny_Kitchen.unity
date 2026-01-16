@@ -2595,7 +2595,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::InteriorExitDoor
   campusSceneName: CampusScene
-  campusSpawnPointName: Spawn_InteriorEntry_BunnyKitchen
+  campusSpawnPointName: Spawn_InteriorExit_BunnyKitchen
 --- !u!1 &2041784195
 GameObject:
   m_ObjectHideFlags: 0
