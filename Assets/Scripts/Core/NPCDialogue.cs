@@ -16,6 +16,10 @@ public class NPCDialogue : MonoBehaviour
     private bool isTalking = false;
 	private NPCIdleMovement idleMovement;
 
+    private Transform player;
+    private PlayerInteractionLock playerLock;
+    private SpriteRenderer npcSprite;
+
     private void Awake()
     {
         interactable = GetComponentInChildren<Interactable>();
@@ -23,6 +27,13 @@ public class NPCDialogue : MonoBehaviour
 
         if (dialogueBox != null)
             dialogueBox.SetActive(false);
+
+        player = GameObject.FindGameObjectWithTag("Player")?.transform;
+
+        if (player != null)
+            playerLock = player.GetComponent<PlayerInteractionLock>();
+
+        npcSprite = GetComponent<SpriteRenderer>();
     }
 
     private void Update()
@@ -46,6 +57,18 @@ public class NPCDialogue : MonoBehaviour
         }
     }
 
+    private void FacePlayer()
+    {
+        if (player == null || npcSprite == null)
+            return;
+
+        float direction = player.position.x - transform.position.x;
+
+        npcSprite.flipX = direction < 0;
+
+        Debug.Log(direction < 0 ? "NPC facing LEFT" : "NPC facing RIGHT");
+    }
+
     private void StartDialogue()
     {
         if (dialogueLines == null || dialogueLines.Length == 0)
@@ -55,6 +78,11 @@ public class NPCDialogue : MonoBehaviour
         currentLine = 0;
 
         interactable.BeginInteraction();
+
+        if (playerLock != null)
+            playerLock.Lock();
+
+        FacePlayer();
 
 		if (idleMovement != null)
 		{
@@ -81,6 +109,9 @@ public class NPCDialogue : MonoBehaviour
 
         dialogueBox.SetActive(false);
         interactable.EndInteraction();
+
+        if (playerLock != null)
+            playerLock.Unlock();
 
 		if (idleMovement != null)
 			idleMovement.ResumeMovement();
