@@ -8,7 +8,7 @@ public class Interactable : MonoBehaviour
     [SerializeField] private TextMeshProUGUI promptText;
     [TextArea] public string promptMessage = "Press E";
 
-    private bool playerInRange = false;
+    private bool petInRange = false;
     private bool isInteracting = false;
 
     private void Awake()
@@ -19,9 +19,9 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Pet")) return;
 
-        playerInRange = true;
+        petInRange = true;
 
         if (interactionPrompt != null && !isInteracting)
         {
@@ -32,12 +32,17 @@ public class Interactable : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (!other.CompareTag("Player")) return;
+        if (!other.CompareTag("Pet")) return;
 
-        playerInRange = false;
+        petInRange = false;
 
-        if (interactionPrompt != null && !isInteracting)
+        if (interactionPrompt != null)
             interactionPrompt.SetActive(false);
+    }
+
+    public virtual void Interact(GameObject interactor)
+    {
+        // Overridden by subclasses
     }
 
     public void BeginInteraction()
@@ -50,7 +55,7 @@ public class Interactable : MonoBehaviour
     public void EndInteraction()
     {
         isInteracting = false;
-        if (interactionPrompt != null && playerInRange)
+        if (interactionPrompt != null && petInRange)
         {
             promptText.text = promptMessage;
             interactionPrompt.SetActive(true);
@@ -59,6 +64,6 @@ public class Interactable : MonoBehaviour
 
     public bool CanInteract()
     {
-        return playerInRange;
+        return petInRange && !isInteracting;
     }
 }

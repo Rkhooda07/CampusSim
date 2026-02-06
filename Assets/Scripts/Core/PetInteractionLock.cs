@@ -1,23 +1,41 @@
 using UnityEngine;
 
-public class PlayerInteractionLock : MonoBehaviour
+public class PetInteractionLock : MonoBehaviour
 {
-    private PlayerMovement playerMovement; // or whatever your movement script is called
+    private PetMovement petMovement;
+    private NPCIdleMovement npcIdleMovement;
+    private Rigidbody2D rb;
 
     private void Awake()
     {
-        playerMovement = GetComponent<PlayerMovement>();
+        petMovement = GetComponent<PetMovement>();
+        npcIdleMovement = GetComponent<NPCIdleMovement>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     public void Lock()
     {
-        if (playerMovement != null)
-            playerMovement.enabled = false;
+        // Lock player-controlled pet movement
+        if (petMovement != null)
+            petMovement.enabled = false;
+
+        // Lock NPC idle movement
+        if (npcIdleMovement != null)
+            npcIdleMovement.enabled = false;
+
+        // Stop any residual physics motion
+        if (rb != null)
+            rb.linearVelocity = Vector2.zero;
     }
 
     public void Unlock()
     {
-        if (playerMovement != null)
-            playerMovement.enabled = true;
+        // Unlock player-controlled pet movement
+        if (petMovement != null)
+            petMovement.enabled = true;
+
+        // Unlock NPC idle movement
+        if (npcIdleMovement != null)
+            npcIdleMovement.enabled = true;
     }
 }

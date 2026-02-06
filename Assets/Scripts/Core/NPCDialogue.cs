@@ -18,9 +18,9 @@ public class NPCDialogue : MonoBehaviour
     private bool isTalking = false;
 	private NPCIdleMovement idleMovement;
 
-    private Transform player;
-    private PlayerInteractionLock playerLock;
+    private PetInteractionLock interactionLock;
     private SpriteRenderer npcSprite;
+    private Transform player;
 
     private void Awake()
     {
@@ -32,12 +32,13 @@ public class NPCDialogue : MonoBehaviour
         if (dialogueBox != null)
             dialogueBox.SetActive(false);
 
-        player = GameObject.FindGameObjectWithTag("Player")?.transform;
-
-        if (player != null)
-            playerLock = player.GetComponent<PlayerInteractionLock>();
+        interactionLock = GetComponent<PetInteractionLock>();
 
         npcSprite = GetComponent<SpriteRenderer>();
+
+        GameObject playerObj = GameObject.FindWithTag("Player");
+        if (playerObj != null)
+            player = playerObj.transform;
     }
 
     private void Update()
@@ -93,8 +94,8 @@ public class NPCDialogue : MonoBehaviour
 
         interactable.BeginInteraction();
 
-        if (playerLock != null)
-            playerLock.Lock();
+        if (interactionLock != null)
+            interactionLock.Lock();
 
         FacePlayer();
 
@@ -124,8 +125,8 @@ public class NPCDialogue : MonoBehaviour
         dialogueBox.SetActive(false);
         interactable.EndInteraction();
 
-        if (playerLock != null)
-            playerLock.Unlock();
+        if (interactionLock != null)
+            interactionLock.Unlock();
 
 		if (idleMovement != null)
 			idleMovement.ResumeMovement();
@@ -145,5 +146,13 @@ public class NPCDialogue : MonoBehaviour
     private void HideBusyMessage()
     {
         dialogueBox.SetActive(false);
+    }
+
+    public void ShowSingleLine(string message)
+    {
+        isTalking = false;
+        currentLine = 0;
+        dialogueBox.SetActive(true);
+        dialogueText.text = message;
     }
 }

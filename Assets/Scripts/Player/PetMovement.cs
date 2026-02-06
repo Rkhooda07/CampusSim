@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PetMovement : MonoBehaviour
 {
     public enum FacingDirection
     {
