@@ -2,7 +2,20 @@ using UnityEngine;
 
 public class ZoneArea : MonoBehaviour
 {
-    [SerializeField] private string zoneName;
+    public enum ZoneCategory
+    {
+        Library,
+        Cafe,
+        Academic,
+        Ground
+    }
+
+    [Header("Zone Settings")]
+    [SerializeField] private string zoneName; // kept for UI display
+    [SerializeField] private ZoneCategory zoneCategory;
+
+    public string ZoneName => zoneName;
+    public ZoneCategory Category => zoneCategory;
 
     private void OnTriggerEnter2D(Collider2D other)
     {
